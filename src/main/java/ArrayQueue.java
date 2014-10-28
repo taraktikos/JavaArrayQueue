@@ -6,8 +6,8 @@ import java.util.Arrays;
 public class ArrayQueue {
 
     private int length = 5;
-    public int[] array;
-    public int first, next;
+    private int[] array;
+    private int first, next;
 
     public ArrayQueue() {
         this.array = new int[this.length];
