@@ -10,6 +10,17 @@ public abstract class Operation implements Value {
     }
 
     public final int evaluate(int... params) {
+        ArrayQueue variables = new ArrayQueue();
+        for (int variable: params) {
+            variables.add(variable);
+        }
+        initVariable(variables);
         return getValue();
+    }
+
+    public void initVariable(ArrayQueue variables) {
+        for (Value value: arguments) {
+            value.initVariable(variables);
+        }
     }
 }

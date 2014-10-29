@@ -3,4 +3,6 @@
  */
 public interface Value {
     int getValue();
+
+    public void initVariable(ArrayQueue variables);
 }

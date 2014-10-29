@@ -13,4 +13,5 @@ public class Const extends Operation {
         return value;
     }
 
+    public void initVariable(ArrayQueue variables) {}
 }

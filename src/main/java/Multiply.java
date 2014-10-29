@@ -17,4 +17,5 @@ public class Multiply extends Operation {
         }
         return result;
     }
+
 }
