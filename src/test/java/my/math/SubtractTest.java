@@ -1,3 +1,9 @@
+package my.math;
+
+import my.math.Const;
+import my.math.Multiply;
+import my.math.Subtract;
+import my.math.Variable;
 import org.junit.Before;
 import org.junit.Test;
 

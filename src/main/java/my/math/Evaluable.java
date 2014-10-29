@@ -1,3 +1,5 @@
+package my.math;
+
 import java.util.Map;
 
 /**

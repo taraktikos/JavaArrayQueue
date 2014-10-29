@@ -1,5 +1,6 @@
+package my.math;
+
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Taras S on 28.10.2014.

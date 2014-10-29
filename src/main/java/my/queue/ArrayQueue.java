@@ -1,3 +1,5 @@
+package my.queue;
+
 /**
  * Created by Taras S on 27.10.2014.
  */
