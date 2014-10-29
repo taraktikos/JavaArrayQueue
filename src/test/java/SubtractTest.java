@@ -1,29 +1,65 @@
+import org.junit.Before;
 import org.junit.Test;
+
+import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
 public class SubtractTest {
 
+    HashMap<String, Integer> map;
+
+    @Before
+    public void setUp() throws Exception {
+        map = new HashMap<String, Integer>();
+    }
+
     @Test
     public void testAll() {
-        Variable x = new Variable("x");
-        assertEquals(4,
+        map.put("x", 5);
+        assertEquals(16,
             new Subtract(
-                new Multiply(x, x),
-                new Multiply(new Const(2), x),
+                new Multiply(
+                    new Variable("x"),
+                    new Variable("x")
+                ),
+                new Multiply(
+                    new Const(2),
+                    new Variable("x")
+                ),
                 new Const(-1)
-            ).evaluate(3)
+            ).evaluate(map)
+        );
+    }
+
+    @Test
+    public void testAll1() {
+        map.put("x", 2);
+        map.put("y", 3);
+        assertEquals(-1,
+            new Subtract(
+                new Multiply(
+                    new Variable("x"),
+                    new Variable("x")
+                ),
+                new Multiply(
+                    new Const(2),
+                    new Variable("y")
+                ),
+                new Const(-1)
+            ).evaluate(map)
         );
     }
 
     @Test
     public void testVariable() {
-        assertEquals(-1, new Variable("x").evaluate(-1));
+        map.put("x", 4);
+        assertEquals(4, new Variable("x").evaluate(map));
     }
 
     @Test(expected = IllegalStateException.class)
     public void testVariableException() {
-        assertEquals(5, new Variable("x").evaluate());
+        assertEquals(2, new Variable("x").evaluate());
     }
 
     @Test
@@ -32,6 +68,11 @@ public class SubtractTest {
             new Subtract(
                 new Const(7),
                 new Const(2)
+            ).evaluate()
+        );
+        assertEquals(-1,
+            new Subtract(
+                new Const(1)
             ).evaluate()
         );
     }

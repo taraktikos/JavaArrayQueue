@@ -1,3 +1,5 @@
+import java.util.Map;
+
 /**
  * Created by Taras S on 28.10.2014.
  */
@@ -9,9 +11,7 @@ public class Const extends Operation {
         this.value = value;
     }
 
-    public int getValue() {
+    public int evaluate(Map<String, Integer> context) {
         return value;
     }
-
-    public void initVariable(ArrayQueue variables) {}
 }

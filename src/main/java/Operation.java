@@ -1,26 +1,19 @@
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Taras S on 28.10.2014.
  */
-public abstract class Operation implements Value {
+public abstract class Operation implements Evaluable {
 
-    protected final Value[] arguments;
+    protected final Evaluable[] arguments;
 
-    public Operation(Value... operations) {
+    public Operation(Evaluable... operations) {
         arguments = operations;
     }
 
-    public final int evaluate(int... params) {
-        ArrayQueue variables = new ArrayQueue();
-        for (int variable: params) {
-            variables.add(variable);
-        }
-        initVariable(variables);
-        return getValue();
+    public int evaluate() {
+        return this.evaluate(new HashMap());
     }
 
-    public void initVariable(ArrayQueue variables) {
-        for (Value value: arguments) {
-            value.initVariable(variables);
-        }
-    }
 }

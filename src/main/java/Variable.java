@@ -1,3 +1,5 @@
+import java.util.Map;
+
 /**
  * Created by Taras S on 28.10.2014.
  */
@@ -10,17 +12,11 @@ public class Variable extends Operation {
         this.name = name;
     }
 
-    public int getValue() {
-        if (value == 0) {
+    public int evaluate(Map<String, Integer> context) {
+        if (context.get(name) == null) {
             throw new IllegalStateException();
         }
-        return value;
-    }
-
-    public void initVariable(ArrayQueue variables) {
-        if (value == 0) {
-            value = variables.remove();
-        }
+        return context.get(name);
     }
 
 }
