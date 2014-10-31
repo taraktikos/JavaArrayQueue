@@ -1,21 +1,52 @@
 package my.parse;
 
+import org.junit.Before;
 import org.junit.Test;
+
+import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
 public class CalcTest {
 
-    @Test
-    public void testEvaluate() throws Exception {
-        Calc calc = new Calc("2+3");
-        calc.parse();
-        assertEquals("5", calc.evaluate());
+    HashMap<String, Integer> map;
+
+    @Before
+    public void setUp() throws Exception {
+        map = new HashMap<String, Integer>();
     }
 
     @Test
-    public void testParse() throws Exception {
-        Calc calc = new Calc("2+3");
-        assertEquals("23+", calc.parse());
+    public void testMain() throws Exception {
+        map.put("x", 0);
+        Calc calc = new Calc("100000*x*x*x*x*x*x/(x-1)");
+        assertEquals("0", calc.evaluate(map));
+        map.replace("x", 2);
+        assertEquals("6400000", calc.evaluate(map));
     }
+
+    @Test
+    public void testVariable() throws Exception {
+        map.put("x", 6);
+        map.put("y", 2);
+        Calc calc = new Calc("x+x*y");
+        assertEquals("18", calc.evaluate(map));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testException() throws Exception {
+        map.put("x", 1);
+        Calc calc = new Calc("100000*x*x*x*x*x*x/(x-1)");
+        assertEquals("18", calc.evaluate(map));
+    }
+
+    @Test
+    public void testEvaluate() throws Exception {
+        Calc calc = new Calc("2+2*2");
+        assertEquals("6", calc.evaluate());
+
+        Calc calc2 = new Calc("(2+2)*2");
+        assertEquals("8", calc2.evaluate());
+    }
+
 }

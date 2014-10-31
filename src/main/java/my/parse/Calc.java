@@ -1,5 +1,9 @@
 package my.parse;
 
+import my.math.Const;
+import my.math.Multiply;
+import my.math.Subtract;
+
 import java.text.ParseException;
 import java.util.*;
 
@@ -27,13 +31,14 @@ public class Calc {
     }
 
     public String evaluate(Map<String, Integer> context) throws ParseException {
+        this.parse(context);
+
         if (stackRPN.empty()) {
             return "";
         }
         stackResult.clear();
         Stack<String> stackRPN = (Stack<String>) this.stackRPN.clone();
 
-        //Collections.replaceAll(stackRPN, variable, variable);
         while (!stackRPN.empty()) {
             String token = stackRPN.pop();
             if (isNumber(token)) {
@@ -41,14 +46,28 @@ public class Calc {
             } else if (isOperator(token)) {
                 int a = Integer.parseInt(stackResult.pop());
                 int b = Integer.parseInt(stackResult.pop());
+                long result = 0;
                 switch (token) {
                     case "+":
-                        stackResult.push(Integer.toString(a + b));
+                        result = a + b;
                         break;
                     case "-":
-                        stackResult.push(Integer.toString(a - b));
+                        result = new Subtract(new Const(b), new Const(a)).evaluate();
+                        break;
+                    case "*":
+                        result = a * b;
+                        break;
+                    case "/":
+                        if (a == 0) {
+                            throw new IllegalArgumentException("division by zero");
+                        }
+                        result = b / a;
                         break;
                 }
+                if (result > Integer.MAX_VALUE) {
+                    throw new RuntimeException("Overflow occured");
+                }
+                stackResult.push(Long.toString(result));
             }
         }
         if (stackResult.size() > 1) {
@@ -57,16 +76,16 @@ public class Calc {
         return stackResult.pop();
     }
 
-    String parse() throws ParseException {
+    String parse(Map<String, Integer> context) throws ParseException {
         stackOperations.clear();
         stackRPN.clear();
-        expression.replace(" ","")
+        expression = expression.replace(" ","")
                 .replace("(-", "(0-")
                 .replace("(+", "(0+");
         if (expression.charAt(0) == '-' || expression.charAt(0) == '+') {
             expression = "0" + expression;
         }
-        //split expression
+
         StringTokenizer stringTokenizer = new StringTokenizer(expression, OPERATORS + "()", true);
         while (stringTokenizer.hasMoreTokens()) {
             String token = stringTokenizer.nextToken();
@@ -86,6 +105,8 @@ public class Calc {
                     stackRPN.push(stackOperations.pop());
                 }
                 stackOperations.pop();
+            } else if (context.get(token) != null) {
+                stackRPN.push(context.get(token).toString());
             } else {
                 throw new ParseException("Unrecognized token: " + token, 0);
             }
@@ -113,7 +134,6 @@ public class Calc {
         try {
             Integer.parseInt(token);
         } catch (Exception e) {
-            //return token.equals(variable);
             return false;
         }
         return true;
