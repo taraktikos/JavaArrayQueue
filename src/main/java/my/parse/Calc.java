@@ -1,29 +1,16 @@
 package my.parse;
 
-import my.math.Const;
-import my.math.Multiply;
-import my.math.Subtract;
-
 import java.text.ParseException;
 import java.util.*;
 
-/**
- * Created by Taras S on 29.10.2014.
- */
 public class Calc {
 
     private final String OPERATORS = "+-*/";
 
-    private String expression;
+    Stack<String> stackRPN;
 
-    private Stack<String> stackOperations = new Stack<String>();
-
-    private Stack<String> stackRPN = new Stack<String>();
-
-    private Stack<String> stackResult = new Stack<String>();
-
-    public Calc(String expression) {
-        this.expression = expression;
+    public Calc(String expression) throws ParseException {
+        stackRPN = this.parse(expression);
     }
 
     public String evaluate() throws ParseException {
@@ -31,18 +18,22 @@ public class Calc {
     }
 
     public String evaluate(Map<String, Integer> context) throws ParseException {
-        this.parse(context);
-
         if (stackRPN.empty()) {
             return "";
         }
-        stackResult.clear();
+        Stack<String> stackResult = new Stack<>();
         Stack<String> stackRPN = (Stack<String>) this.stackRPN.clone();
 
         while (!stackRPN.empty()) {
             String token = stackRPN.pop();
             if (isNumber(token)) {
                 stackResult.push(token);
+            } else if (isVariable(token)) {
+                if (context.get(token) != null) {
+                    stackResult.push(Integer.toString(context.get(token)));
+                } else {
+                    throw new RuntimeException("Variable " + token + "not found");
+                }
             } else if (isOperator(token)) {
                 int a = Integer.parseInt(stackResult.pop());
                 int b = Integer.parseInt(stackResult.pop());
@@ -52,7 +43,7 @@ public class Calc {
                         result = a + b;
                         break;
                     case "-":
-                        result = new Subtract(new Const(b), new Const(a)).evaluate();
+                        result = b - a;
                         break;
                     case "*":
                         result = a * b;
@@ -70,15 +61,12 @@ public class Calc {
                 stackResult.push(Long.toString(result));
             }
         }
-        if (stackResult.size() > 1) {
-            throw new ParseException("Some operator is missing", 0);
-        }
         return stackResult.pop();
     }
 
-    String parse(Map<String, Integer> context) throws ParseException {
-        stackOperations.clear();
-        stackRPN.clear();
+    Stack<String> parse(String expression) throws ParseException {
+        Stack<String> stackOperations = new Stack<>();
+        Stack<String> stackRPN = new Stack<>();
         expression = expression.replace(" ","")
                 .replace("(-", "(0-")
                 .replace("(+", "(0+");
@@ -89,7 +77,7 @@ public class Calc {
         StringTokenizer stringTokenizer = new StringTokenizer(expression, OPERATORS + "()", true);
         while (stringTokenizer.hasMoreTokens()) {
             String token = stringTokenizer.nextToken();
-            if (isNumber(token)) {
+            if (isNumber(token) || isVariable(token)) {
                 stackRPN.push(token);
             } else if (isOperator(token)) {
                 while (!stackOperations.empty()
@@ -105,8 +93,6 @@ public class Calc {
                     stackRPN.push(stackOperations.pop());
                 }
                 stackOperations.pop();
-            } else if (context.get(token) != null) {
-                stackRPN.push(context.get(token).toString());
             } else {
                 throw new ParseException("Unrecognized token: " + token, 0);
             }
@@ -115,7 +101,7 @@ public class Calc {
             stackRPN.push(stackOperations.pop());
         }
         Collections.reverse(stackRPN);
-        return stackRPN.toString();
+        return stackRPN;
     }
 
     private boolean isOperator(String token) {
@@ -132,11 +118,15 @@ public class Calc {
 
     private boolean isNumber(String token) {
         try {
-            Integer.parseInt(token);
+            int a = Integer.parseInt(token);
         } catch (Exception e) {
             return false;
         }
         return true;
+    }
+
+    private boolean isVariable(String token) {
+        return token.matches("[a-z]");
     }
 
     private byte getPrecedence(String token) {

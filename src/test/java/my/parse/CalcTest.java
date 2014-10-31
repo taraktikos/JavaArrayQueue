@@ -2,9 +2,7 @@ package my.parse;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import java.util.HashMap;
-
 import static org.junit.Assert.*;
 
 public class CalcTest {
@@ -13,7 +11,7 @@ public class CalcTest {
 
     @Before
     public void setUp() throws Exception {
-        map = new HashMap<String, Integer>();
+        map = new HashMap<>();
     }
 
     @Test
@@ -33,6 +31,13 @@ public class CalcTest {
         assertEquals("18", calc.evaluate(map));
     }
 
+   /* @Ignore @Test(expected = IllegalArgumentException.class)
+    public void testOverflowException() throws Exception {
+        map.put("x", 1000);
+        Calc calc = new Calc("100000*x*x*x*x*x*x/(x-1)");
+        assertEquals("18", calc.evaluate(map));
+    }
+*/
     @Test(expected = IllegalArgumentException.class)
     public void testException() throws Exception {
         map.put("x", 1);
