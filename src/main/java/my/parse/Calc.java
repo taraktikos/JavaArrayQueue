@@ -1,5 +1,7 @@
 package my.parse;
 
+import my.math.*;
+
 import java.text.ParseException;
 import java.util.*;
 
@@ -21,49 +23,46 @@ public class Calc {
         if (stackRPN.empty()) {
             return "";
         }
-        Stack<String> stackResult = new Stack<>();
+        Stack<Evaluable> stackResult = new Stack<>();
         Stack<String> stackRPN = (Stack<String>) this.stackRPN.clone();
 
         while (!stackRPN.empty()) {
             String token = stackRPN.pop();
             if (isNumber(token)) {
-                stackResult.push(token);
+                stackResult.push(new Const(Integer.parseInt(token)));
             } else if (isVariable(token)) {
                 if (context.get(token) != null) {
-                    stackResult.push(Integer.toString(context.get(token)));
+                    stackResult.push(new Variable(token));
                 } else {
                     throw new RuntimeException("Variable " + token + " not found");
                 }
             } else if (isOperator(token)) {
-                int a = Integer.parseInt(stackResult.pop());
-                int b = Integer.parseInt(stackResult.pop());
-                long result = 0;
+                Evaluable a = stackResult.pop();
+                Evaluable b = stackResult.pop();
+                Evaluable result = new Const(0);
                 switch (token) {
                     case "+":
-                        result = a + b;
+                        result = new Sum(a, b);
                         break;
                     case "-":
-                        result = b - a;
+                        result = new Subtract(b, a);
                         break;
                     case "*":
-                        result = a * b;
+                        result = new Multiply(a, b);
                         break;
                     case "/":
-                        if (a == 0) {
-                            throw new RuntimeException("division by zero");
-                        }
-                        result = b / a;
+                        result = new Division(b, a);
                         break;
                 }
-                if (result > Integer.MAX_VALUE) {
+                /*if (result > Integer.MAX_VALUE) {
                     throw new RuntimeException("Overflow occurred");
                 } else if (result < Integer.MIN_VALUE) {
                     throw new RuntimeException("Underflow occurred");
-                }
-                stackResult.push(Long.toString(result));
+                }*/
+                stackResult.push(result);
             }
         }
-        return stackResult.pop();
+        return Integer.toString(stackResult.pop().evaluate(context));
     }
 
     Stack<String> parse(String expression) throws ParseException {
