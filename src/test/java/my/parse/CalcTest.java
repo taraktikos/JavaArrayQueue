@@ -2,6 +2,7 @@ package my.parse;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Ignore;
 import java.util.HashMap;
 import static org.junit.Assert.*;
 
@@ -29,16 +30,19 @@ public class CalcTest {
         map.put("y", 2);
         Calc calc = new Calc("x+x*y");
         assertEquals("18", calc.evaluate(map));
+        map.replace("y", 4);
+        assertEquals("30", calc.evaluate(map));
     }
 
-   /* @Ignore @Test(expected = IllegalArgumentException.class)
+    @Ignore
+    @Test(expected = RuntimeException.class)
     public void testOverflowException() throws Exception {
         map.put("x", 1000);
         Calc calc = new Calc("100000*x*x*x*x*x*x/(x-1)");
         assertEquals("18", calc.evaluate(map));
     }
-*/
-    @Test(expected = IllegalArgumentException.class)
+
+    @Test(expected = RuntimeException.class)
     public void testException() throws Exception {
         map.put("x", 1);
         Calc calc = new Calc("100000*x*x*x*x*x*x/(x-1)");

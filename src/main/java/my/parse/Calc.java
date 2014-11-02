@@ -32,7 +32,7 @@ public class Calc {
                 if (context.get(token) != null) {
                     stackResult.push(Integer.toString(context.get(token)));
                 } else {
-                    throw new RuntimeException("Variable " + token + "not found");
+                    throw new RuntimeException("Variable " + token + " not found");
                 }
             } else if (isOperator(token)) {
                 int a = Integer.parseInt(stackResult.pop());
@@ -50,13 +50,15 @@ public class Calc {
                         break;
                     case "/":
                         if (a == 0) {
-                            throw new IllegalArgumentException("division by zero");
+                            throw new RuntimeException("division by zero");
                         }
                         result = b / a;
                         break;
                 }
                 if (result > Integer.MAX_VALUE) {
-                    throw new RuntimeException("Overflow occured");
+                    throw new RuntimeException("Overflow occurred");
+                } else if (result < Integer.MIN_VALUE) {
+                    throw new RuntimeException("Underflow occurred");
                 }
                 stackResult.push(Long.toString(result));
             }
