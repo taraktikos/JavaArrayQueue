@@ -15,7 +15,7 @@ public class Main {
         try {
             Calc calc = new Calc(expression);
             HashMap<String, Integer> map = new HashMap<>();
-            System.out.println("x      f(x)");
+            System.out.println("x\tf(x)");
             for (int i = 0; i <= 10; i++) {
                 if (map.get("x") == null) {
                     map.put("x", i);
@@ -24,9 +24,9 @@ public class Main {
                 }
                 try {
                     String result = calc.evaluate(map);
-                    System.out.println(i + "      " + result);
+                    System.out.println(i + "\t" + result);
                 } catch (RuntimeException e) {
-                    System.out.println(i + "      " + e.getMessage());
+                    System.out.println(i + "\t" + e.getMessage());
                 }
             }
         } catch (ParseException e) {

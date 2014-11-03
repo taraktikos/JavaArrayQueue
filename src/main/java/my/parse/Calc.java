@@ -5,14 +5,14 @@ import my.math.*;
 import java.text.ParseException;
 import java.util.*;
 
-public class Calc {
+public class Calc  {
 
     private final String OPERATORS = "+-*/";
 
-    Stack<String> stackRPN;
+    private Evaluable result;
 
     public Calc(String expression) throws ParseException {
-        stackRPN = this.parse(expression);
+        parseRPN(parse(expression));
     }
 
     public String evaluate() throws ParseException {
@@ -20,22 +20,20 @@ public class Calc {
     }
 
     public String evaluate(Map<String, Integer> context) throws ParseException {
+        return Integer.toString(result.evaluate(context));
+    }
+
+    public void parseRPN(Stack<String> stackRPN) throws ParseException {
         if (stackRPN.empty()) {
-            return "";
+            return;
         }
         Stack<Evaluable> stackResult = new Stack<>();
-        Stack<String> stackRPN = (Stack<String>) this.stackRPN.clone();
-
         while (!stackRPN.empty()) {
             String token = stackRPN.pop();
             if (isNumber(token)) {
                 stackResult.push(new Const(Integer.parseInt(token)));
             } else if (isVariable(token)) {
-                if (context.get(token) != null) {
-                    stackResult.push(new Variable(token));
-                } else {
-                    throw new RuntimeException("Variable " + token + " not found");
-                }
+                stackResult.push(new Variable(token));
             } else if (isOperator(token)) {
                 Evaluable a = stackResult.pop();
                 Evaluable b = stackResult.pop();
@@ -54,15 +52,10 @@ public class Calc {
                         result = new Division(b, a);
                         break;
                 }
-                /*if (result > Integer.MAX_VALUE) {
-                    throw new RuntimeException("Overflow occurred");
-                } else if (result < Integer.MIN_VALUE) {
-                    throw new RuntimeException("Underflow occurred");
-                }*/
                 stackResult.push(result);
             }
         }
-        return Integer.toString(stackResult.pop().evaluate(context));
+        this.result = stackResult.pop();
     }
 
     Stack<String> parse(String expression) throws ParseException {
