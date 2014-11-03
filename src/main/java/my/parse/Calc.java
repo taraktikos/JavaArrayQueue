@@ -5,7 +5,7 @@ import my.math.*;
 import java.text.ParseException;
 import java.util.*;
 
-public class Calc  {
+public class Calc implements Evaluable {
 
     private final String OPERATORS = "+-*/";
 
@@ -15,12 +15,12 @@ public class Calc  {
         parseRPN(parse(expression));
     }
 
-    public String evaluate() throws ParseException {
+    public int evaluate() {
         return this.evaluate(new HashMap<String, Integer>());
     }
 
-    public String evaluate(Map<String, Integer> context) throws ParseException {
-        return Integer.toString(result.evaluate(context));
+    public int evaluate(Map<String, Integer> context) {
+        return result.evaluate(context);
     }
 
     public void parseRPN(Stack<String> stackRPN) throws ParseException {

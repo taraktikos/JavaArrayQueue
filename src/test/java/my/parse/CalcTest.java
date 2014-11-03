@@ -19,9 +19,9 @@ public class CalcTest {
     public void testMain() throws Exception {
         map.put("x", 0);
         Calc calc = new Calc("100000*x*x*x*x*x*x/(x-1)");
-        assertEquals("0", calc.evaluate(map));
+        assertEquals(0, calc.evaluate(map));
         map.replace("x", 2);
-        assertEquals("6400000", calc.evaluate(map));
+        assertEquals(6400000, calc.evaluate(map));
     }
 
     @Test
@@ -29,9 +29,9 @@ public class CalcTest {
         map.put("x", 6);
         map.put("y", 2);
         Calc calc = new Calc("x+x*y");
-        assertEquals("18", calc.evaluate(map));
+        assertEquals(18, calc.evaluate(map));
         map.replace("y", 4);
-        assertEquals("30", calc.evaluate(map));
+        assertEquals(30, calc.evaluate(map));
     }
 
     @Ignore
@@ -39,23 +39,23 @@ public class CalcTest {
     public void testOverflowException() throws Exception {
         map.put("x", 1000);
         Calc calc = new Calc("100000*x*x*x*x*x*x/(x-1)");
-        assertEquals("18", calc.evaluate(map));
+        assertEquals(18, calc.evaluate(map));
     }
 
     @Test(expected = RuntimeException.class)
     public void testException() throws Exception {
         map.put("x", 1);
         Calc calc = new Calc("100000*x*x*x*x*x*x/(x-1)");
-        assertEquals("18", calc.evaluate(map));
+        assertEquals(18, calc.evaluate(map));
     }
 
     @Test
     public void testEvaluate() throws Exception {
         Calc calc = new Calc("2+2*2");
-        assertEquals("6", calc.evaluate());
+        assertEquals(6, calc.evaluate());
 
         Calc calc2 = new Calc("(2+2)*2");
-        assertEquals("8", calc2.evaluate());
+        assertEquals(8, calc2.evaluate());
     }
 
 }

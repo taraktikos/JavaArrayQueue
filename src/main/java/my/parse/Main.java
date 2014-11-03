@@ -23,7 +23,7 @@ public class Main {
                     map.replace("x", i);
                 }
                 try {
-                    String result = calc.evaluate(map);
+                    String result = Integer.toString(calc.evaluate(map));
                     System.out.println(i + "\t" + result);
                 } catch (RuntimeException e) {
                     System.out.println(i + "\t" + e.getMessage());
