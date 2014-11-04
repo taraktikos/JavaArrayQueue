@@ -25,11 +25,12 @@ public class CalcProcessor {
         bufferedReader.close();
 
         HashMap<String, Integer> map = new HashMap<>();
-        String header = "x\t\t\t";
+        StringBuilder header = new StringBuilder("x\t\t\t");
         for (Map.Entry<Integer, Evaluable> function: functions.entrySet()) {
-            header += "f(" + function.getKey() + ")\t\t\t";
+            header.append("f(").append(function.getKey()).append(")\t\t\t");
         }
-        output.write((header + "\n").getBytes());
+        header.append("\n");
+        output.write(header.toString().getBytes());
         for (int i = 0; i <= 10; i++) {
             map.put("x", i);
             StringBuilder resultRow = new StringBuilder();
