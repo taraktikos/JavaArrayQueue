@@ -8,18 +8,24 @@ public class FileCalc {
             System.out.println("Type output file path");
             return;
         }
-        InputStream input = new ByteArrayInputStream("x*x\nx\n10+2-8\n".getBytes());
-        FileOutputStream output = new FileOutputStream(args[0]);
+        InputStream input = null;
+        FileOutputStream output = null;
 
         try {
+            input = new ByteArrayInputStream("x*x\nx\n10+2-8\n".getBytes());
             CalcProcessor calcProcessor = new CalcProcessor(input);
             try {
+                output = new FileOutputStream(args[0]);
                 calcProcessor.write(output, 4);
             } finally {
-                output.close();
+                if (output != null) {
+                    output.close();
+                }
             }
         } finally {
-            input.close();
+            if (input != null) {
+                input.close();
+            }
         }
         System.out.println("Done 1");
 
