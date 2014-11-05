@@ -4,22 +4,23 @@ import my.math.Evaluable;
 
 import java.io.*;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CalcProcessor {
 
-    private HashMap<Integer, Evaluable> parsedFunctions;
+    private List<Evaluable> parsedFunctions;
 
     public CalcProcessor(InputStream input) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(input));
         String line;
 
-        parsedFunctions = new HashMap<>();
-        int key = 0;
+        parsedFunctions = new ArrayList<>();
         try {
             while ((line = bufferedReader.readLine()) != null) {
-                parsedFunctions.put(key++, new Calc(line));
+                parsedFunctions.add(new Calc(line));
             }
         } catch (ParseException e) {
             System.out.println("Parse exception " + e.getMessage());
@@ -33,8 +34,8 @@ public class CalcProcessor {
     public void write(OutputStream output, int maxCount) throws IOException {
         HashMap<String, Integer> map = new HashMap<>();
         StringBuilder header = new StringBuilder("x\t\t\t");
-        for (Map.Entry<Integer, Evaluable> function: parsedFunctions.entrySet()) {
-            header.append("f(").append(function.getKey()).append(")\t\t\t");
+        for (int i = 0; i < parsedFunctions.size(); i++) {
+            header.append("f(").append(i).append(")\t\t\t");
         }
         header.append("\n");
         output.write(header.toString().getBytes());
@@ -42,9 +43,9 @@ public class CalcProcessor {
             map.put("x", i);
             StringBuilder resultRow = new StringBuilder();
             resultRow.append(i).append("\t\t\t");
-            for (Map.Entry<Integer, Evaluable> function: parsedFunctions.entrySet()) {
+            for (Evaluable function: parsedFunctions) {
                 try {
-                    resultRow.append(function.getValue().evaluate(map)).append("\t\t\t");
+                    resultRow.append(function.evaluate(map)).append("\t\t\t");
                 } catch (RuntimeException e) {
                     resultRow.append(e.getMessage()).append("\t\t\t");
                 }
