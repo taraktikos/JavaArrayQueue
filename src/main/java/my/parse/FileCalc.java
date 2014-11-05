@@ -4,8 +4,12 @@ import java.io.*;
 public class FileCalc {
 
     public static void main(String[] args) throws IOException {
+        if (args.length == 0) {
+            System.out.println("Type output file path");
+            return;
+        }
         InputStream input = new ByteArrayInputStream("x*x\nx\n10+2-8\n".getBytes());
-        FileOutputStream output = new FileOutputStream(FileCalc.class.getResource("/output.txt").getPath());
+        FileOutputStream output = new FileOutputStream(args[0]);
 
         try {
             CalcProcessor calcProcessor = new CalcProcessor(input);
@@ -25,7 +29,7 @@ public class FileCalc {
         // warning before commit
         try (
             InputStream inputNew = FileCalc.class.getResourceAsStream("/input.txt");
-            FileOutputStream outputNew = new FileOutputStream(FileCalc.class.getResource("/output2.txt").getPath())
+            FileOutputStream outputNew = new FileOutputStream(args[0])
         ) {
             CalcProcessor calcProcessor = new CalcProcessor(inputNew);
             calcProcessor.write(outputNew);
