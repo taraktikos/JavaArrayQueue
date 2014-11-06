@@ -47,7 +47,7 @@ public class Bag<E> implements Collection<E> {
     }
 
     public boolean contains(Object o){
-        return false;
+        return indexOf(o) >= 0;
     }
 
     public int size(){
@@ -74,5 +74,18 @@ public class Bag<E> implements Collection<E> {
         if (size - elementData.length > 0) {
             elementData = Arrays.copyOf(elementData, size);
         }
+    }
+
+    public int indexOf(Object o) {
+        if (o == null) {
+            for (int i = 0; i < size; i++)
+                if (elementData[i]==null)
+                    return i;
+        } else {
+            for (int i = 0; i < size; i++)
+                if (o.equals(elementData[i]))
+                    return i;
+        }
+        return -1;
     }
 }

@@ -45,7 +45,14 @@ public class BagTest {
 
     @Test
     public void testContains() throws Exception {
-
+        Collection<Integer> bag = new Bag<>();
+        bag.add(1);
+        assertFalse(bag.contains(33));
+        bag.add(33);
+        assertTrue(bag.contains(33));
+        assertFalse(bag.contains(null));
+        bag.add(null);
+        assertTrue(bag.contains(null));
     }
 
     @Test
