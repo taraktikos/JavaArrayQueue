@@ -67,7 +67,21 @@ public class Bag<E> implements Collection<E> {
     }
 
     public boolean remove(Object o){
-        return false;
+        int index = indexOf(o);
+        if (index == -1) {
+            return false;
+        }
+        fastRemove(index);
+        return true;
+
+    }
+
+    private void fastRemove(int index) {
+        int numMoved = size - index - 1;
+        if (numMoved > 0)
+            System.arraycopy(elementData, index+1, elementData, index,
+                    numMoved);
+        elementData[--size] = null;
     }
 
     private void grow(int size) {
@@ -87,5 +101,10 @@ public class Bag<E> implements Collection<E> {
                     return i;
         }
         return -1;
+    }
+
+    private void rangeCheck(int index) {
+        if (index >= size)
+            throw new IndexOutOfBoundsException("Index: "+index+", Size: "+size);
     }
 }

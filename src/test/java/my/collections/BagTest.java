@@ -83,6 +83,15 @@ public class BagTest {
 
     @Test
     public void testRemove() throws Exception {
-
+        Collection<Integer> bag = new Bag<>();
+        bag.add(1);
+        assertTrue(bag.remove(1));
+        assertEquals(0, bag.size());
+        bag.add(2);
+        bag.add(3);
+        assertEquals(2, bag.size());
+        assertTrue(bag.remove(2));
+        assertEquals(1, bag.size());
+        assertFalse(bag.remove(2));
     }
 }
