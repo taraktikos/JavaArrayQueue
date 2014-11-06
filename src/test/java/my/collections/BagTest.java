@@ -2,6 +2,8 @@ package my.collections;
 
 import org.junit.Test;
 
+import java.util.Collection;
+
 import static org.junit.Assert.*;
 
 public class BagTest {
@@ -48,7 +50,13 @@ public class BagTest {
 
     @Test
     public void testSize() throws Exception {
-
+        Collection<Integer> bag = new Bag<>();
+        bag.add(1);
+        bag.add(5);
+        bag.add(7);
+        assertEquals(3, bag.size());
+        bag.add(33);
+        assertEquals(4, bag.size());
     }
 
     @Test

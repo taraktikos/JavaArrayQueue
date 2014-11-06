@@ -1,9 +1,18 @@
 package my.collections;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
 public class Bag<E> implements Collection<E> {
+
+    private Object[] elementData;
+
+    private int size;
+
+    public Bag() {
+        elementData = new Object[]{};
+    }
 
     public Object[] toArray(){
         return null;
@@ -31,8 +40,10 @@ public class Bag<E> implements Collection<E> {
 
     }
 
-    public boolean add(E o){
-        return false;
+    public boolean add(E e) {
+        grow(size + 1);  // Increments modCount!!
+        elementData[size++] = e;
+        return true;
     }
 
     public boolean contains(Object o){
@@ -40,7 +51,7 @@ public class Bag<E> implements Collection<E> {
     }
 
     public int size(){
-        return 1;
+        return size;
     }
 
     public boolean isEmpty(){
@@ -57,5 +68,11 @@ public class Bag<E> implements Collection<E> {
 
     public boolean remove(Object o){
         return false;
+    }
+
+    private void grow(int size) {
+        if (size - elementData.length > 0) {
+            elementData = Arrays.copyOf(elementData, size);
+        }
     }
 }
