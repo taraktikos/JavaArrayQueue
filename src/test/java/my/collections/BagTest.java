@@ -3,6 +3,8 @@ package my.collections;
 import org.junit.Test;
 
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
 
@@ -35,7 +37,30 @@ public class BagTest {
 
     @Test
     public void testIterator() throws Exception {
+        Collection<Integer> bag = new Bag<>();
+        bag.add(1);
+        bag.add(5);
+        bag.add(7);
 
+        Iterator<Integer> iterator = bag.iterator();
+
+        assertTrue(iterator.hasNext());
+        assertEquals(1, (int) iterator.next());
+
+        assertTrue(iterator.hasNext());
+        assertEquals(5, (int) iterator.next());
+
+        assertTrue(iterator.hasNext());
+        assertEquals(7, (int) iterator.next());
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testIteratorException() throws Exception {
+        Collection<Integer> bag = new Bag<>();
+
+        Iterator<Integer> iterator = bag.iterator();
+
+        iterator.next();
     }
 
     @Test

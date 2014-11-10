@@ -3,6 +3,7 @@ package my.collections;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class Bag<E> implements Collection<E> {
 
@@ -35,9 +36,25 @@ public class Bag<E> implements Collection<E> {
         return false;
     }
 
-    public Iterator iterator(){
-        return null;
+    @Override
+    public Iterator<E> iterator() {
+        return new Iterator<E>() {
 
+            private int currentIndex = 0;
+
+            @Override
+            public boolean hasNext() {
+                return currentIndex < size && elementData[currentIndex] != null;
+            }
+
+            @Override
+            public E next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                return (E) elementData[currentIndex++];
+            }
+        };
     }
 
     public boolean add(E e) {
