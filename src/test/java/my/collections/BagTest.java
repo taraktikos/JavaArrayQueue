@@ -16,11 +16,6 @@ public class BagTest {
     }
 
     @Test
-    public void testToArray1() throws Exception {
-
-    }
-
-    @Test
     public void testClear() throws Exception {
 
     }
@@ -65,7 +60,13 @@ public class BagTest {
 
     @Test
     public void testAdd() throws Exception {
-
+        Collection<Integer> bag = new Bag<>();
+        bag.add(1);
+        assertEquals(1, bag.size());
+        bag.add(2);
+        assertEquals(2, bag.size());
+        bag.add(3);
+        assertEquals(2, bag.size());
     }
 
     @Test
@@ -83,6 +84,7 @@ public class BagTest {
     @Test
     public void testSize() throws Exception {
         Collection<Integer> bag = new Bag<>();
+        assertEquals(0, bag.size());
         bag.add(1);
         bag.add(5);
         bag.add(7);
@@ -93,7 +95,10 @@ public class BagTest {
 
     @Test
     public void testIsEmpty() throws Exception {
-
+        Collection<Integer> bag = new Bag<>();
+        assertTrue(bag.isEmpty());
+        bag.add(1);
+        assertFalse(bag.isEmpty());
     }
 
     @Test

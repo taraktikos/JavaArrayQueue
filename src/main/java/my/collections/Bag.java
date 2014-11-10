@@ -72,7 +72,7 @@ public class Bag<E> implements Collection<E> {
     }
 
     public boolean isEmpty(){
-        return false;
+        return size == 0;
     }
 
     public boolean containsAll(Collection o){
