@@ -66,7 +66,7 @@ public class BagTest {
         bag.add(2);
         assertEquals(2, bag.size());
         bag.add(3);
-        assertEquals(2, bag.size());
+        assertEquals(3, bag.size());
     }
 
     @Test
