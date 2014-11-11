@@ -33,8 +33,8 @@ public class BagTest {
     @Test
     public void testIterator() throws Exception {
         Collection<Integer> bag = new Bag<>();
-        bag.add(1);
         bag.add(5);
+        bag.add(1);
         bag.add(7);
         bag.add(1);
         bag.add(5);
@@ -42,16 +42,16 @@ public class BagTest {
         Iterator<Integer> iterator = bag.iterator();
 
         assertTrue(iterator.hasNext());
-        assertEquals(1, (int) iterator.next());
-
-        assertTrue(iterator.hasNext());
-        assertEquals(1, (int) iterator.next());
-
-        assertTrue(iterator.hasNext());
         assertEquals(5, (int) iterator.next());
 
         assertTrue(iterator.hasNext());
         assertEquals(5, (int) iterator.next());
+
+        assertTrue(iterator.hasNext());
+        assertEquals(1, (int) iterator.next());
+
+        assertTrue(iterator.hasNext());
+        assertEquals(1, (int) iterator.next());
 
         assertTrue(iterator.hasNext());
         assertEquals(7, (int) iterator.next());

@@ -37,16 +37,13 @@ public class Bag<E> implements Collection<E> {
 
     @Override
     public Iterator<E> iterator() {
-        final Object[] sortedArray = this.toArray();
-        Arrays.sort(sortedArray);
-
         return new Iterator<E>() {
 
             private int currentIndex = 0;
 
             @Override
             public boolean hasNext() {
-                return currentIndex < size && sortedArray[currentIndex] != null;
+                return currentIndex < size && elementData[currentIndex] != null;
             }
 
             @Override
@@ -54,14 +51,21 @@ public class Bag<E> implements Collection<E> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return (E) sortedArray[currentIndex++];
+                return (E) elementData[currentIndex++];
             }
         };
     }
 
     public boolean add(E e) {
         grow(size + 1);  // Increments modCount!!
-        elementData[size++] = e;
+        int index = indexOf(e);
+        if (index >= 0) {
+            System.arraycopy(elementData, index, elementData, index + 1, size - index);
+            elementData[index] = e;
+            size++;
+        } else {
+            elementData[size++] = e;
+        }
         return true;
     }
 
