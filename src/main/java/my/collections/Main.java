@@ -12,14 +12,14 @@ public class Main {
         bag.add(1);
         bag.add(12);
         bag.add(1);
-//        for (Integer i : bag) {
-//            System.out.print(i + ",");
-//        }
-//        // output: 1,1,1,5,7,8,12,
-//        System.out.println();
-//        for (Integer i : bag) {
-//            System.out.print(i + ",");
-//        }
+        for (Integer i : bag) {
+            System.out.print(i + ",");
+        }
+        // output: 1,1,1,5,7,8,12,
+        System.out.println();
+        for (Integer i : bag) {
+            System.out.print(i + ",");
+        }
     }
 
 }
