@@ -36,11 +36,19 @@ public class BagTest {
         bag.add(1);
         bag.add(5);
         bag.add(7);
+        bag.add(1);
+        bag.add(5);
 
         Iterator<Integer> iterator = bag.iterator();
 
         assertTrue(iterator.hasNext());
         assertEquals(1, (int) iterator.next());
+
+        assertTrue(iterator.hasNext());
+        assertEquals(1, (int) iterator.next());
+
+        assertTrue(iterator.hasNext());
+        assertEquals(5, (int) iterator.next());
 
         assertTrue(iterator.hasNext());
         assertEquals(5, (int) iterator.next());
