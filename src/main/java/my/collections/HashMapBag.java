@@ -89,7 +89,9 @@ public class HashMapBag<E> implements Collection<E> {
     public boolean remove(Object o) {
         if (map.containsKey(o)) {
             List<E> listForRemove = map.get(o);
-            if (listForRemove.remove(listForRemove.size() - 1) != null && listForRemove.size() == 0) {
+            if (listForRemove.size() > 1) {
+                listForRemove.remove(listForRemove.size() - 1);
+            } else {
                 map.remove(o);
             }
             size --;
