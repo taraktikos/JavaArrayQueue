@@ -4,7 +4,7 @@ import java.util.Collection;
 public class Main {
 
     public static void main(String[] args) {
-        Collection<Integer> bag = new Bag<>();
+        Collection<Integer> bag = new HashMapBag<>();
         bag.add(1);
         bag.add(5);
         bag.add(7);
