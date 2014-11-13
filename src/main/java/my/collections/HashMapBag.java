@@ -56,6 +56,11 @@ public class HashMapBag<E> implements Collection<E> {
                 listIterator = mapIterator.next().getValue().iterator();
                 return listIterator.next();
             }
+
+            @Override
+            public void remove() {
+                //@TODO 
+            }
         };
     }
 
