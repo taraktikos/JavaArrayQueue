@@ -42,9 +42,10 @@ public class HashMapBagTest {
 
         Iterator<Integer> iterator = bag.iterator();
 
-        List<Integer> uniqueItems = new ArrayList<>();
+        Set<Integer> uniqueItems = new HashSet<>();
         Integer previousItem = null;
         Integer element = null;
+        int count = 0;
         while (iterator.hasNext()) {
             element = iterator.next();
             if (previousItem == null) {
@@ -56,11 +57,14 @@ public class HashMapBagTest {
                 }
             }
             assertFalse(uniqueItems.contains(element));
+            count ++;
         }
+        assertEquals(3, uniqueItems.size());
+        assertEquals(count, bag.size());
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void testIteratorException() throws Exception {
+    @Test
+    public void testEmptyIterator() throws Exception {
         Iterator<Integer> iterator = bag.iterator();
         assertFalse(iterator.hasNext());
     }
@@ -85,16 +89,26 @@ public class HashMapBagTest {
 
     @Test
     public void testToArray() throws Exception {
-        bag.add(5);
-        bag.add(1);
-        bag.add(21);
-        bag.add(5);
-        bag.add(7);
-        bag.add(1);
-        bag.add(1);
-        bag.add(21);
-        bag.add(7);
-        assertEquals(9, bag.toArray().length);
+        List<Integer> items = new ArrayList<Integer>() {{
+            add(5);
+            add(1);
+            add(21);
+            add(5);
+            add(7);
+            add(2);
+            add(2);
+            add(21);
+            add(7);
+        }};
+        for(Integer item: items) {
+            bag.add(item);
+        }
+        Object[] array = bag.toArray();
+        assertEquals(9, array.length);
+        List<Object> testList = Arrays.asList(array);
+        for(Object item: items) {
+           assertTrue(testList.contains(item));
+        }
     }
 
     @Test
@@ -108,6 +122,18 @@ public class HashMapBagTest {
         assertFalse(bag.remove(21));
         assertTrue(bag.remove(1));
         assertEquals(4, bag.size());
+    }
+
+    @Test
+    public void testRemoveEmpty() throws Exception {
+        bag.add(5);
+        assertEquals(1, bag.size());
+        assertFalse(bag.remove(10));
+        assertEquals(1, bag.size());
+        assertTrue(bag.remove(5));
+        assertEquals(0, bag.size());
+        assertFalse(bag.remove(5));
+        assertEquals(0, bag.size());
     }
 
     @Test

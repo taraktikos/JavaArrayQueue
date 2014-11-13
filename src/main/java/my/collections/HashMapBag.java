@@ -32,10 +32,16 @@ public class HashMapBag<E> implements Collection<E> {
         return new Iterator<E>() {
 
             private Iterator<Map.Entry<E, List<E>>> mapIterator = map.entrySet().iterator();
-            private Iterator<E> listIterator = mapIterator.next().getValue().iterator();
+            private Iterator<E> listIterator;
 
             @Override
             public boolean hasNext() {
+                if (listIterator == null) {
+                    if (!mapIterator.hasNext()) {
+                        return false;
+                    }
+                    listIterator = mapIterator.next().getValue().iterator();
+                }
                 return listIterator.hasNext() || mapIterator.hasNext();
             }
 
@@ -56,11 +62,9 @@ public class HashMapBag<E> implements Collection<E> {
     @Override
     public Object[] toArray() {
         Object[] array = new Object[size];
-        for (int i = 0; i < array.length; i++) {
-            if (!iterator().hasNext()) {
-                return array;
-            }
-            array[i] = iterator().next();
+        int i = 0;
+        for(Object item: this) {
+            array[i++] = item;
         }
         return array;
     }
@@ -84,8 +88,11 @@ public class HashMapBag<E> implements Collection<E> {
     @Override
     public boolean remove(Object o) {
         if (map.containsKey(o)) {
+            if (map.get(o).remove(map.get(o).size() - 1) != null && map.get(o).size() == 0) {
+                map.remove(o);
+            }
             size --;
-            return map.get(o).remove(o);
+            return true;
         }
         return false;
     }
@@ -116,10 +123,8 @@ public class HashMapBag<E> implements Collection<E> {
     public boolean removeAll(Collection<?> c) {
         boolean result = false;
         for (Object e : c) {
-            if (contains(e)) {
-                if (remove(e)) {
-                    result = true;
-                }
+            if (remove(e)) {
+                result = true;
             }
         }
         return result;
