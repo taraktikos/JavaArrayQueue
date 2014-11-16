@@ -33,6 +33,7 @@ public class HashMapBag<E> implements Collection<E> {
 
             private Iterator<Map.Entry<E, List<E>>> mapIterator = map.entrySet().iterator();
             private Iterator<E> listIterator;
+            private E lastElement = null;
 
             @Override
             public boolean hasNext() {
@@ -51,15 +52,19 @@ public class HashMapBag<E> implements Collection<E> {
                     throw new NoSuchElementException();
                 }
                 if (listIterator.hasNext()) {
-                    return listIterator.next();
+                    return lastElement = listIterator.next();
                 }
                 listIterator = mapIterator.next().getValue().iterator();
-                return listIterator.next();
+                return lastElement = listIterator.next();
             }
 
             @Override
             public void remove() {
-                //@TODO 
+                if (lastElement == null) {
+                    throw new IllegalStateException();
+                }
+                HashMapBag.this.remove(lastElement);
+                lastElement = null;
             }
         };
     }
