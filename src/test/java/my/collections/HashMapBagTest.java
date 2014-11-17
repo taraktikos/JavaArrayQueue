@@ -20,10 +20,13 @@ public class HashMapBagTest {
     public void testAdd() throws Exception {
         assertEquals(0, bag.size());
         assertTrue(bag.add(5));
+        assertBagEqualsToArray(bag, new Object[] {5});
         assertEquals(1, bag.size());
         assertTrue(bag.add(1));
+        assertBagEqualsToArray(bag, new Object[] {1,5});
         assertEquals(2, bag.size());
         assertTrue(bag.add(5));
+        assertBagEqualsToArray(bag, new Object[] {1,5,5});
         assertEquals(3, bag.size());
     }
 
@@ -122,6 +125,7 @@ public class HashMapBagTest {
         assertFalse(bag.remove(21));
         assertTrue(bag.remove(1));
         assertEquals(4, bag.size());
+        assertBagEqualsToArray(bag, new Object[] {1,1,5,5});
     }
 
     @Test
@@ -162,8 +166,10 @@ public class HashMapBagTest {
             add(5);
         }};
         assertTrue(bag.addAll(list));
+        assertBagEqualsToArray(bag, new Object[] {1,1,5,5,5});
         assertEquals(5, bag.size());
         assertTrue(bag.removeAll(list));
+        assertBagEqualsToArray(bag, new Object[] {1,5,5});
         assertEquals(3, bag.size());
     }
 
@@ -193,24 +199,34 @@ public class HashMapBagTest {
         bag.add(1);
 
         assertEquals(4, bag.size());
-
+        assertBagEqualsToArray(bag, new Object[] {1,1,2,5});
         Iterator<Integer> iterator = bag.iterator();
 
         iterator.next();
         iterator.remove();
         assertEquals(3, bag.size());
+        assertBagEqualsToArray(bag, new Object[] {1,2,5});
 
         iterator.next();
         iterator.remove();
         assertEquals(2, bag.size());
+        assertBagEqualsToArray(bag, new Object[] {2,5});
 
         iterator.next();
         iterator.remove();
         assertEquals(1, bag.size());
+        assertBagEqualsToArray(bag, new Object[] {5});
 
         iterator.next();
         iterator.remove();
         assertEquals(0, bag.size());
+        assertBagEqualsToArray(bag, new Object[] {});
+    }
+
+    private void assertBagEqualsToArray(Collection mapBag, Object[] array) {
+        Object[] bagArray = bag.toArray();
+        Arrays.sort(bagArray);
+        assertArrayEquals(bagArray, array);
     }
 
     @Test(expected = ConcurrentModificationException.class)
