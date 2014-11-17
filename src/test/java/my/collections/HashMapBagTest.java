@@ -11,6 +11,12 @@ public class HashMapBagTest {
 
     Collection<Integer> bag;
 
+    private void assertBagEqualsToArray(Collection mapBag, Object[] array) {
+        Object[] bagArray = bag.toArray();
+        Arrays.sort(bagArray);
+        assertArrayEquals(bagArray, array);
+    }
+
     @Before
     public void setUp() throws Exception {
         bag = new HashMapBag<>();
@@ -221,12 +227,6 @@ public class HashMapBagTest {
         iterator.remove();
         assertEquals(0, bag.size());
         assertBagEqualsToArray(bag, new Object[] {});
-    }
-
-    private void assertBagEqualsToArray(Collection mapBag, Object[] array) {
-        Object[] bagArray = bag.toArray();
-        Arrays.sort(bagArray);
-        assertArrayEquals(bagArray, array);
     }
 
     @Test(expected = ConcurrentModificationException.class)
