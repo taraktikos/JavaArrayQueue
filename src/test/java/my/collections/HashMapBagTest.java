@@ -185,4 +185,69 @@ public class HashMapBagTest {
         assertEquals(0, bag.size());
     }
 
+    @Test
+    public void testIteratorRemove() throws Exception {
+        bag.add(5);
+        bag.add(1);
+        bag.add(2);
+        bag.add(1);
+
+        assertEquals(4, bag.size());
+
+        Iterator<Integer> iterator = bag.iterator();
+
+        iterator.next();
+        iterator.remove();
+        assertEquals(3, bag.size());
+
+        iterator.next();
+        iterator.remove();
+        assertEquals(2, bag.size());
+
+        iterator.next();
+        iterator.remove();
+        assertEquals(1, bag.size());
+
+        iterator.next();
+        iterator.remove();
+        assertEquals(0, bag.size());
+    }
+
+    @Test(expected = ConcurrentModificationException.class)
+    public void testIteratorRemoveConcurrent() throws Exception {
+        bag.add(5);
+        bag.add(1);
+
+        assertEquals(2, bag.size());
+
+        Iterator<Integer> iterator = bag.iterator();
+
+        iterator.next();
+        iterator.remove();
+        assertEquals(1, bag.size());
+
+        bag.add(2);
+
+        iterator.next();
+        iterator.remove();
+        assertEquals(0, bag.size());
+
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testIteratorRemoveWithoutNext() throws Exception {
+        bag.add(5);
+        bag.add(1);
+
+        assertEquals(2, bag.size());
+
+        Iterator<Integer> iterator = bag.iterator();
+
+        iterator.next();
+        iterator.remove();
+        assertEquals(1, bag.size());
+        iterator.remove();
+        assertEquals(0, bag.size());
+    }
+
 }

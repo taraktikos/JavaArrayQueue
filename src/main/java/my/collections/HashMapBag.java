@@ -8,6 +8,8 @@ public class HashMapBag<E> implements Collection<E> {
 
     private int size;
 
+    private int modCount = 0;
+
     public HashMapBag() {
         map = new HashMap<>();
     }
@@ -33,7 +35,8 @@ public class HashMapBag<E> implements Collection<E> {
 
             private Iterator<Map.Entry<E, List<E>>> mapIterator = map.entrySet().iterator();
             private Iterator<E> listIterator;
-            private E lastElement = null;
+            private E currentElement = null;
+            private int expectedModCount = modCount;
 
             @Override
             public boolean hasNext() {
@@ -52,19 +55,30 @@ public class HashMapBag<E> implements Collection<E> {
                     throw new NoSuchElementException();
                 }
                 if (listIterator.hasNext()) {
-                    return lastElement = listIterator.next();
+                    currentElement = listIterator.next();
+                    return currentElement;
                 }
                 listIterator = mapIterator.next().getValue().iterator();
-                return lastElement = listIterator.next();
+                currentElement = listIterator.next();
+                return currentElement;
             }
 
             @Override
             public void remove() {
-                if (lastElement == null) {
+                if (modCount != expectedModCount) {
+                    throw new ConcurrentModificationException();
+                }
+                if (currentElement == null) {
                     throw new IllegalStateException();
                 }
-                HashMapBag.this.remove(lastElement);
-                lastElement = null;
+                List<E> list = HashMapBag.this.map.get(currentElement);
+                if (list.size() > 1) {
+                    listIterator.remove();
+                } else {
+                    mapIterator.remove();
+                }
+                HashMapBag.this.size--;
+                currentElement = null;
             }
         };
     }
@@ -86,6 +100,7 @@ public class HashMapBag<E> implements Collection<E> {
 
     @Override
     public boolean add(E e) {
+        modCount++;
         if (map.containsKey(e)) {
             map.get(e).add(e);
         } else {
@@ -97,10 +112,11 @@ public class HashMapBag<E> implements Collection<E> {
 
     @Override
     public boolean remove(Object o) {
+        modCount++;
         if (map.containsKey(o)) {
             List<E> listForRemove = map.get(o);
             if (listForRemove.size() > 1) {
-                listForRemove.remove(listForRemove.size() - 1);
+                listForRemove.remove(0);
             } else {
                 map.remove(o);
             }
@@ -122,6 +138,7 @@ public class HashMapBag<E> implements Collection<E> {
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
+        modCount++;
         boolean result = false;
         for (E e : c) {
             if (add(e)) {
@@ -134,6 +151,7 @@ public class HashMapBag<E> implements Collection<E> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
+        modCount++;
         boolean result = false;
         for (Object e : c) {
             if (remove(e)) {
@@ -150,6 +168,7 @@ public class HashMapBag<E> implements Collection<E> {
 
     @Override
     public void clear() {
+        modCount++;
         map.clear();
         size = 0;
     }
